@@ -17,7 +17,7 @@ public class ElevatorTest
             passenger.start();
         }
 
-        TimeUnit.SECONDS.sleep(3);
+        TimeUnit.SECONDS.sleep(2);
         assertEquals(0, elevator.getCurrentPassengerCount());
     }
 }

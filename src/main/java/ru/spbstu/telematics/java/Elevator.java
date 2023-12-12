@@ -1,29 +1,33 @@
 package ru.spbstu.telematics.java;
 
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicInteger;
 
 class Elevator
 {
-    private int currentPassengerCount;
+    private AtomicInteger currentPassengerCount;
     private Semaphore elevatorSemaphore;
 
     public Elevator()
     {
-        this.currentPassengerCount = 0;
+        this.currentPassengerCount = new AtomicInteger(0);
         this.elevatorSemaphore = new Semaphore(1);
     }
 
-    public int getCurrentPassengerCount() { return currentPassengerCount; }
+    public int getCurrentPassengerCount()
+    {
+        return currentPassengerCount.get();
+    }
 
     public void enter() throws InterruptedException
     {
         elevatorSemaphore.acquire();
         try
         {
-            if (currentPassengerCount < 10)
+            if (currentPassengerCount.get() < 10)
             {
-                currentPassengerCount++;
-                System.out.println("Passenger entered Elevator. Current count: " + currentPassengerCount);
+                currentPassengerCount.incrementAndGet();
+                System.out.println("Passenger entered Elevator. Current count: " + currentPassengerCount.get());
             }
             else
                 System.out.println("Elevator is full. Passenger cannot enter.");
@@ -39,15 +43,15 @@ class Elevator
         elevatorSemaphore.acquire();
         try
         {
-            if (currentPassengerCount > 0)
+            if (currentPassengerCount.get() > 0)
             {
-                currentPassengerCount--;
-                System.out.println("Passenger exited Elevator. Current count: " + currentPassengerCount);
+                currentPassengerCount.decrementAndGet();
+                System.out.println("Passenger exited Elevator. Current count: " + currentPassengerCount.get());
             }
             else
                 System.out.println("No passengers inside Elevator. Cannot exit.");
         }
-        finally
+        finally 
         {
             elevatorSemaphore.release();
         }

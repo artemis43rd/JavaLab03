@@ -32,7 +32,7 @@ class Passenger extends Thread
                 System.out.println(name + " exited the elevator.");
             }
             else
-                System.out.println("Elevator is full. Passenger cannot enter.");
+                System.out.println(name + " could not enter the elevator.");
         }
         catch (InterruptedException e)
         {
